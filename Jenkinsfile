@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOTNET_CLI_HOME = "${WORKSPACE}"
         PUBLISH_DIR = 'out'
-        PROJECT_PATH = 'TodoApi/TodoApi.csproj' // 👉 Replace with actual path to your .csproj
+        PROJECT_PATH = 'TodoApi.csproj'  // ✅ your actual file
     }
 
     stages {
@@ -29,7 +29,8 @@ pipeline {
 
         stage('Run Unit Tests') {
             steps {
-                bat "dotnet test %PROJECT_PATH% --no-build --verbosity normal"
+                // Optional: only if you add a test project later
+                echo "No test project found. Skipping for now."
             }
         }
 
@@ -41,7 +42,7 @@ pipeline {
 
         stage('Deploy (Optional)') {
             steps {
-                echo "Add deployment logic here if needed"
+                echo "✅ App ready in %PUBLISH_DIR%. Add deployment step if needed (e.g., xcopy to IIS)."
             }
         }
     }
