@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using TodoApi.Data; // ⛔️ THIS LINE IS THE ERROR
-
+using TodoApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
