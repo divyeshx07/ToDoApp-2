@@ -6,19 +6,16 @@ pipeline {
         PUBLISH_DIR = 'out'
     }
 
-    tools {
-        dotnet 'dotnet-sdk' // Ensure this matches your Jenkins SDK configuration
-    }
-
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/your-username/todo-app.git'
+                git branch: 'main', url: 'https://github.com/divyeshx07/ToDoApp-2.git'
             }
         }
 
         stage('Restore Dependencies') {
             steps {
+                sh 'dotnet --version'      // confirm dotnet is installed
                 sh 'dotnet restore'
             }
         }
@@ -43,9 +40,7 @@ pipeline {
 
         stage('Deploy (Optional)') {
             steps {
-                echo "You can add steps here to copy files to a web server or remote machine"
-                // Example: copy files to IIS server or shared drive
-                // sh 'scp -r $PUBLISH_DIR/* user@yourserver:/var/www/todo-app/'
+                echo "You can add custom deployment commands here (e.g., copy to IIS, SCP to server)"
             }
         }
     }
