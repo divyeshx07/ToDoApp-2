@@ -1,58 +1,27 @@
 pipeline {
     agent any
 
-    environment {
-        DOTNET_CLI_HOME = "${WORKSPACE}"
-        PUBLISH_DIR = 'out'
-        PROJECT_PATH = 'TodoApi.csproj'  // ✅ your actual file
-    }
-
     stages {
-        stage('Checkout') {
+        stage('Clone') {
             steps {
-                git branch: 'main', url: 'https://github.com/divyeshx07/ToDoApp-2.git'
-            }
-        }
-
-        stage('Restore Dependencies') {
-            steps {
-                bat 'dotnet --version'
-                bat "dotnet restore %PROJECT_PATH%"
+                git 'https://github.com/your-username/your-repo.git'
             }
         }
 
         stage('Build') {
             steps {
-                bat "dotnet build %PROJECT_PATH% --configuration Release --no-restore"
+                sh 'echo "This is the build step"'
+                // e.g., npm install, dotnet build, etc.
             }
         }
 
-        stage('Run Unit Tests') {
+        stage('Deploy to EC2') {
             steps {
-                // Optional: only if you add a test project later
-                echo "No test project found. Skipping for now."
+                sshagent(['ec2-ssh-key']) {
+                    sh 'scp -o StrictHostKeyChecking=no -r ./dist ubuntu@<35.176.246.99>:/home/ubuntu/app'
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@<35.176.246.99> "cd /home/ubuntu/app && ./deploy.sh"'
+                }
             }
-        }
-
-        stage('Publish App') {
-            steps {
-                bat "dotnet publish %PROJECT_PATH% -c Release -o %PUBLISH_DIR%"
-            }
-        }
-
-        stage('Deploy (Optional)') {
-            steps {
-                echo "✅ App ready in %PUBLISH_DIR%. Add deployment step if needed (e.g., xcopy to IIS)."
-            }
-        }
-    }
-
-    post {
-        success {
-            echo "✅ CI/CD pipeline completed successfully!"
-        }
-        failure {
-            echo "❌ Pipeline failed. Please check logs."
         }
     }
 }
