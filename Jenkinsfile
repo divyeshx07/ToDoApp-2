@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-                git 'https://github.com/divyeshx07/ToDoApp-2.git'
+                git credentialsId: 'github-creds', url: 'https://github.com/divyeshx07/ToDoApp-2.git'
 
             }
         }
